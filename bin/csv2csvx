@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
+
+require 'csvx'
+require 'csv'
+
+if ARGV.first.nil? or !File.readable?(ARGV.first) or %w[-h --help].include?(ARGV.first)
+  $stderr.puts "Usage: csv2csvx <CSV file>"
+  $stderr.puts "Converts your CSV file into enterprise ready CSVX."
+  exit 1
+end
+
+csv = CSV.read(ARGV.first)
+header = csv.shift
+CSVX.write_to_csvx({:header => header, :rows => csv}, "#{ARGV.first}x")
